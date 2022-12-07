@@ -1,16 +1,16 @@
-﻿using Encryptor;
-using System.Text.Json;
+﻿using Encryptor.Sources.Users;
+using Encryptor;
+using Encryptor.Sources.Notes;
 
 User temp = new User();
+string tempStr;
 ConsoleKeyInfo key;
 using (UserList Users = FileController.GetInstance().ReadInfo())
 {
     do
     {
         Console.Clear();
-        Console.WriteLine("1 - Register");
-        Console.WriteLine("2 - Login");
-        Console.WriteLine("Esc - Exit");
+        Console.WriteLine("1 - Register\n2 - Login\nEsc - Exit");
         key = Console.ReadKey(true);
         if (key.KeyChar == '1')
         {
@@ -26,7 +26,7 @@ using (UserList Users = FileController.GetInstance().ReadInfo())
             }
             else
             {
-                Users.Users.Add(temp);
+                Users.Add(temp);
                 temp = new User();
                 Console.WriteLine("Registration successful");
                 Console.ReadKey(true);
@@ -42,10 +42,245 @@ using (UserList Users = FileController.GetInstance().ReadInfo())
             temp.Password = StringEncryptor.SimpleEnc(Console.ReadLine());
             if (Users.LoginCheck(temp.Login))
             {
+                
                 if (Users.Find(temp).CompareTo(temp) == 0)
                 {
+                    User LoggedIn = Users.Find(temp);
                     Console.WriteLine("Successfully logged in");
                     Console.ReadKey(true);
+                    do
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Currently present {LoggedIn.Notes.Count} note(s)");
+                        Console.WriteLine("1 - Add note\n2 - Remove note\n3 - Edit note\n4 - Find notes by priority\n5 - Find duplicates by name\n6 - Sort notes by date\n7 - Read all notes\nEsc - exit");
+                        key = Console.ReadKey(true);
+                        if (key.KeyChar == '1')
+                        {
+                            Console.Clear();
+                            Note tempNote = new Note();
+                            Console.WriteLine("Enter Note title");
+                            tempStr = Console.ReadLine();
+                            tempNote.Title = tempStr;
+                            do
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Enter Note priority:\n1 - Low\n2 - Medium\n3 - High");
+                                key = Console.ReadKey(true);
+                                if (key.KeyChar == '1')
+                                {
+                                    tempNote.Priority = "Low";
+                                    Console.WriteLine("Success");
+                                }
+                                else if (key.KeyChar == '2')
+                                {
+                                    tempNote.Priority = "Medium";
+                                    Console.WriteLine("Success");
+                                }
+                                else if (key.KeyChar == '3')
+                                {
+                                    tempNote.Priority = "Medium";
+                                    Console.WriteLine("Success");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid command");
+                                }
+                                Console.ReadKey(true);
+                            } while (tempNote.Priority == null);
+                            Console.Clear();
+                            Console.WriteLine("Enter Note body");
+                            tempStr = Console.ReadLine();
+                            tempNote.Body = tempStr;
+                            LoggedIn.Notes.Add(tempNote);
+                            Console.Clear();
+                            Console.WriteLine("Note Saved");
+                            Console.ReadKey(true);
+                        }
+                        else if (key.KeyChar == '2')
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Enter note title you wish to remove");
+                            tempStr = Console.ReadLine();
+                            if (LoggedIn.Notes.RemoveByTitle(tempStr))
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Success");
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("No relevant notes found");
+                            }
+                            Console.ReadKey(true);
+                        }
+                        else if (key.KeyChar == '3')
+                        {
+                            do
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Enter note title you wish to edit");
+                                tempStr = Console.ReadLine();
+                                int tempIndex = LoggedIn.Notes.FindIndexByTitle(tempStr);
+                                if (tempIndex != -1)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(LoggedIn.Notes[tempIndex]);
+                                    Console.WriteLine("\n\nChoose what do you want to edit:\n1 - Title\n2 - Priority\n3 - Body");
+                                    key = Console.ReadKey(true);
+                                    if (key.KeyChar == '1')
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Enter new title");
+                                        tempStr = Console.ReadLine();
+                                        LoggedIn.Notes[tempIndex].Title = tempStr;
+                                        Console.WriteLine("Success");
+                                    }
+                                    else if (key.KeyChar == '2')
+                                    {
+                                        do
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine("Enter Note priority:\n1 - Low\n2 - Medium\n3 - High");
+                                            key = Console.ReadKey(true);
+                                            if (key.KeyChar == 1)
+                                            {
+                                                LoggedIn.Notes[tempIndex].Priority = "Low";
+                                                Console.WriteLine("Success");
+                                            }
+                                            else if (key.KeyChar == 2)
+                                            {
+                                                LoggedIn.Notes[tempIndex].Priority = "Medium";
+                                                Console.WriteLine("Success");
+                                            }
+                                            else if (key.KeyChar == 3)
+                                            {
+                                                LoggedIn.Notes[tempIndex].Priority = "Medium";
+                                                Console.WriteLine("Success");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Invalid value");
+                                            }
+                                        } while (LoggedIn.Notes[tempIndex].Priority.Length == 0);
+                                    }
+                                    else if (key.KeyChar == '3')
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Enter new body");
+                                        tempStr = Console.ReadLine();
+                                        LoggedIn.Notes[tempIndex].Body = tempStr;
+                                        Console.WriteLine("Success");
+                                    }
+                                    else
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Invalid command");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("No relevant notes found");
+                                }
+                                Console.ReadKey(true);
+                                break;
+                            } while (true);
+                        }
+                        else if (key.KeyChar == '4')
+                        {
+                            do
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Enter Note priority you wish to view:\n1 - Low\n2 - Medium\n3 - High");
+                                key = Console.ReadKey(true);
+                                if (key.KeyChar == '1')
+                                {
+                                    if (LoggedIn.Notes.FindPriority("Low").Count > 0)
+                                    {
+                                        Console.WriteLine("Relevant notes:\n");
+                                        LoggedIn.Notes.FindPriority("Low").ForEach(x => Console.WriteLine(x + "\n"));
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("No relevant notes");
+                                    }
+                                }
+                                else if (key.KeyChar == '2')
+                                {
+                                    if (LoggedIn.Notes.FindPriority("Medium").Count > 0)
+                                    {
+                                        Console.WriteLine("Relevant notes:\n");
+                                        LoggedIn.Notes.FindPriority("Medium").ForEach(x => Console.WriteLine(x + "\n"));
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("No relevant notes");
+                                    }
+                                }
+                                else if (key.KeyChar == '3')
+                                {
+                                    if (LoggedIn.Notes.FindPriority("High").Count > 0)
+                                    {
+                                        Console.WriteLine("Relevant notes:\n");
+                                        LoggedIn.Notes.FindPriority("High").ForEach(x => Console.WriteLine(x + "\n"));
+                                    }                               
+                                    else
+                                    {
+                                        Console.WriteLine("No relevant notes");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid value");
+                                }
+                                Console.ReadKey(true);
+                                break;
+                            } while (true);
+                        }
+                        else if (key.KeyChar == '5')
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Enter Note title you wish to view:");
+                            tempStr = Console.ReadLine();
+                            if (LoggedIn.Notes.FindDuplicates(tempStr).Count > 1)
+                            {
+                                Console.WriteLine("Relevant notes:\n");
+                                LoggedIn.Notes.FindDuplicates(tempStr).ForEach(x => Console.Write(x + "\n"));
+                            }
+                            else
+                            {
+                                Console.WriteLine("No duplicates");
+                            }
+                            Console.ReadKey(true);
+                        }
+                        else if (key.KeyChar == '6')
+                        {
+                            Console.Clear();
+                            LoggedIn.Notes.Sort();
+                            Console.WriteLine("Success");
+                            Console.ReadKey(true);
+                        }
+                        else if (key.KeyChar == '7')
+                        {
+                            Console.Clear();
+                            LoggedIn.Notes.ForEach(x => Console.WriteLine(x + "\n"));
+                            Console.ReadKey(true);
+                        }
+                        else if (key.KeyChar == 27)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Exiting...");
+                            Console.ReadKey(true);
+                            break;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Invalid command");
+                            Console.ReadKey(true);
+                        }
+                    } while (true);
+                    Users[Users.FindIndex(x => x.Login.Equals(LoggedIn.Login))] = LoggedIn;
                 }
                 else
                 {

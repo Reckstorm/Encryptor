@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Encryptor.Sources.Users;
 
 namespace Encryptor
 {
@@ -30,7 +31,7 @@ namespace Encryptor
             if (File.Exists(path))
             {
                 string tempUsers = File.ReadAllText(path);
-                temp.Users = JsonSerializer.Deserialize<List<User>>(tempUsers);
+                temp.AddRange(JsonSerializer.Deserialize<List<User>>(tempUsers));
             }
             return temp;
         }
