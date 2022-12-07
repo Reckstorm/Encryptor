@@ -279,7 +279,6 @@ using (UserList Users = FileController.GetInstance().ReadInfo())
                             Console.ReadKey(true);
                         }
                     } while (true);
-                    Users[Users.FindIndex(x => x.Login.Equals(Users[LoggedIn].Login))] = Users[LoggedIn];
                 }
                 else
                 {
