@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Encryptor.Sources.Notes
 {
-    internal class Note : IComparable<Note>
+    public class Note : IComparable<Note>
     {
         public string? Title { get; set; }
         public string? Body { get; set; }

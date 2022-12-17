@@ -8,7 +8,7 @@ using Encryptor.Sources.Users;
 
 namespace Encryptor
 {
-    internal sealed class FileController
+    public sealed class FileController
     {
         private string path = "Users.json";
 

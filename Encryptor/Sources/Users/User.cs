@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Encryptor.Sources.Users
 {
-    internal class User : IComparable<User>
+    public class User : IComparable<User>
     {
         public string Login { get; set; }
         public string Password { get; set; }

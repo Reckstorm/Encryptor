@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Encryptor.Sources.Notes
 {
-    internal class NoteList : List<Note>
+    public class NoteList : List<Note>
     {
         public List<Note> FindPriority(string priority) => FindAll(x => x.Priority.Equals(priority));
         public List<Note> FindDuplicates(string title) => FindAll(x => x.Title.Equals(title));

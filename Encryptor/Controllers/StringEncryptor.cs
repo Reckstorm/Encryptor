@@ -7,9 +7,9 @@ using System.Security.Cryptography;
 
 namespace Encryptor
 {
-    static class StringEncryptor
+    public static class StringEncryptor
     {
-        static byte[] Crypt(string data, string salt = "")
+        public static byte[] Crypt(string data, string salt = "")
         {
             SHA256Managed crypt = new SHA256Managed();
             byte[] bytes = Encoding.UTF8.GetBytes(salt + data + salt);
@@ -17,7 +17,7 @@ namespace Encryptor
             return bytesHash;
         }
 
-        static string BuildString(byte[] bytesHash)
+        public static string BuildString(byte[] bytesHash)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var item in bytesHash)
